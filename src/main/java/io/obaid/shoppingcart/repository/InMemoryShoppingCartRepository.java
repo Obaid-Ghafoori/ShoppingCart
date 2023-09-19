@@ -24,12 +24,9 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      */
     @Override
     public void addItemToCart(ShoppingCartItem shoppingCartItem) {
-        ShoppingCartItem existingShoppingCartItem = shoppingCarItems.stream()
-                .filter(item -> item.getId().equals(shoppingCartItem.getId()))
-                .findFirst()
-                .orElse(null);
-        if (existingShoppingCartItem != null) {
-            existingShoppingCartItem.setQuantity(existingShoppingCartItem.getQuantity() + shoppingCartItem.getQuantity());
+        Optional<ShoppingCartItem> existingShoppingCartItem = findItemById(shoppingCartItem.getId());
+        if (!existingShoppingCartItem.isPresent()) {
+            existingShoppingCartItem.get().setQuantity(existingShoppingCartItem.get().getQuantity() + shoppingCartItem.getQuantity());
         } else {
             shoppingCarItems.add(shoppingCartItem);
         }
@@ -45,16 +42,13 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      */
     @Override
     public void editItemInCart(long itemId, Product product, int quantity) {
-        ShoppingCartItem itemInShoppingCart = shoppingCarItems.stream()
-                .filter(item -> item.getId().equals(itemId))
-                .findFirst()
-                .orElse(null);
-        if (itemInShoppingCart == null) {
+        Optional<ShoppingCartItem> itemInShoppingCart = findItemById(itemId);
+        if (itemInShoppingCart.isEmpty()) {
             throw new ItemNotFoundException("Shopping cart item not found");
         }
 
-        itemInShoppingCart.setProduct(product);
-        itemInShoppingCart.setQuantity(quantity);
+        itemInShoppingCart.get().setProduct(product);
+        itemInShoppingCart.get().setQuantity(quantity);
 
     }
 
