@@ -13,9 +13,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>shoppingcart</name>
 	<description>This is a simple shopping cart application that allows users to add, edit, remove, and view items in their cart. The application does not require a database connection, so all data is stored in memory.</description>
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
