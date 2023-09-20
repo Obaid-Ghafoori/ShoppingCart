@@ -28,27 +28,45 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
         if (!existingShoppingCartItem.isPresent()) {
             existingShoppingCartItem.get().setQuantity(existingShoppingCartItem.get().getQuantity() + shoppingCartItem.getQuantity());
         } else {
+            ShoppingCartItem cartItem = new ShoppingCartItem();
+            cartItem.setId(shoppingCartItem.getId());
+            cartItem.setProduct(shoppingCartItem.getProduct());
+            cartItem.setQuantity(shoppingCartItem.getQuantity());
+
             shoppingCarItems.add(shoppingCartItem);
         }
     }
 
+    @Override
+    public Product addProduct(Product product) {
+        Product productToAdd = new Product();
+        productToAdd.setId(product.getId());
+        productToAdd.setName(product.getName());
+        productToAdd.setDescription(product.getDescription());
+        productToAdd.setPrice(productToAdd.getPrice());
+        productToAdd.setQuantityInStock(product.getQuantityInStock());
+        productToAdd.setCategory(product.getCategory());
+
+        return productToAdd;
+    }
+
+
     /**
      * Edits an existing shopping cart item in the repository.
      *
-     * @param itemId   the ID of the shopping cart item to edit
-     * @param product  the new product for the shopping cart item
-     * @param quantity the new quantity for the shopping cart item
+     * @param itemId           the ID of the shopping cart item to edit
+     * @param shoppingCartItem the item in the shopping cart
      * @throws @link{ItemNotFoundException} if the item could not be found
      */
     @Override
-    public void editItemInCart(long itemId, Product product, int quantity) {
+    public void editItemInCart(long itemId, ShoppingCartItem shoppingCartItem) {
         Optional<ShoppingCartItem> itemInShoppingCart = findItemById(itemId);
         if (itemInShoppingCart.isEmpty()) {
             throw new ItemNotFoundException("Shopping cart item not found");
         }
 
-        itemInShoppingCart.get().setProduct(product);
-        itemInShoppingCart.get().setQuantity(quantity);
+        itemInShoppingCart.get().setProduct(shoppingCartItem.getProduct());
+        itemInShoppingCart.get().setQuantity(shoppingCartItem.getQuantity());
 
     }
 
