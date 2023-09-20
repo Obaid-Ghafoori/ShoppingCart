@@ -85,7 +85,6 @@ public class ShoppingCartController {
     public List<ShoppingCartItem> getShoppingCartItems() {
         return shoppingCartService.getShoppingCartItems();
     }
-
     /**
      *
      * @return Welcome message

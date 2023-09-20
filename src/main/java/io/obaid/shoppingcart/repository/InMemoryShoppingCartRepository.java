@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A simple implementation of the `ShoppingCartRepository` interface that uses a `List` to store the shopping cart items in memory.
+ * An  implementation of the `ShoppingCartRepository` interface that uses a `List` to store the shopping cart items in memory.
  */
 @AllArgsConstructor
 public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
@@ -37,6 +37,11 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
         }
     }
 
+    /**
+     *
+     * @param product a provided product to be added to the stock
+     * @return @link{Product}
+     */
     @Override
     public Product addProduct(Product product) {
         Product productToAdd = new Product();
