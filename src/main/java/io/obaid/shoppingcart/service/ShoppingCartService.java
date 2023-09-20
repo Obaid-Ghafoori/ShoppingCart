@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +22,9 @@ public class ShoppingCartService {
         this.shoppingCartItemList = shoppingCartItem;
         this.shoppingCartRepository = new InMemoryShoppingCartRepository(shoppingCartItemList);
     }
-    public void addItemToCart(ShoppingCartItem shoppingCartItem) {
+    public ShoppingCartItem addItemToCart(ShoppingCartItem shoppingCartItem) {
         shoppingCartRepository.addItemToCart(shoppingCartItem);
+        return shoppingCartItem;
     }
 
     public void addProduct(Product product) {

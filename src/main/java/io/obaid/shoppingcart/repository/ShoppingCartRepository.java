@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShoppingCartRepository {
-    void addItemToCart(ShoppingCartItem shoppingCartItem);
+    ShoppingCartItem addItemToCart(ShoppingCartItem shoppingCartItem);
     Product addProduct(Product product);
 
     void editItemInCart(long itemId, ShoppingCartItem shoppingCartItem);

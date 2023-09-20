@@ -34,9 +34,10 @@ public class ShoppingCartController {
      * @return a redirect to the shopping cart page
      */
     @PostMapping("/cart/add-item")
-    public Long addItemToCart(@RequestBody ShoppingCartItem shoppingCartItem) {
-        shoppingCartService.addItemToCart(shoppingCartItem);
-        return shoppingCartItem.getId();
+    public ShoppingCartItem addItemToCart(@RequestBody ShoppingCartItem shoppingCartItem) {
+        ShoppingCartItem updatedItem = shoppingCartService.addItemToCart(shoppingCartItem);
+        System.out.println(updatedItem);
+        return updatedItem;
     }
 
     /**

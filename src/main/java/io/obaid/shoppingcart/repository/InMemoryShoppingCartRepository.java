@@ -21,24 +21,26 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * otherwise the quantity of the item will be incremented
      *
      * @param shoppingCartItem the shopping cart item to add
+     * @return
      */
     @Override
-    public void addItemToCart(ShoppingCartItem shoppingCartItem) {
-        Optional<ShoppingCartItem> existingShoppingCartItem = findItemById(shoppingCartItem.getId());
-        if (!existingShoppingCartItem.isPresent()) {
-            existingShoppingCartItem.get().setQuantity(existingShoppingCartItem.get().getQuantity() + shoppingCartItem.getQuantity());
+    public ShoppingCartItem addItemToCart(ShoppingCartItem shoppingCartItem) {
+        Optional<ShoppingCartItem> existingShoppingCartItem = shoppingCarItems.stream()
+                .filter(i -> i.getId().equals(shoppingCartItem.getId()))
+                .findFirst();
+        ShoppingCartItem cartItem = new ShoppingCartItem();
+        if (existingShoppingCartItem.isPresent()) {
+            cartItem = existingShoppingCartItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + shoppingCartItem.getQuantity());
         } else {
-            ShoppingCartItem cartItem = new ShoppingCartItem();
-            cartItem.setId(shoppingCartItem.getId());
-            cartItem.setProduct(shoppingCartItem.getProduct());
-            cartItem.setQuantity(shoppingCartItem.getQuantity());
-
+            cartItem = shoppingCartItem;
             shoppingCarItems.add(shoppingCartItem);
         }
+        System.out.println("From InMemoryClass :->" + cartItem);
+        return cartItem;
     }
 
     /**
-     *
      * @param product a provided product to be added to the stock
      * @return @link{Product}
      */
