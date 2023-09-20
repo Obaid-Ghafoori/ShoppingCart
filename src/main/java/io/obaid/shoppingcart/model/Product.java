@@ -21,14 +21,11 @@ public class Product {
 
     private String description;
 
-    private BigDecimal price;
+    private Double price;
 
     private Integer quantityInStock;
 
     private String category;
-
-    private String imageUrl;
-
 }
 
 

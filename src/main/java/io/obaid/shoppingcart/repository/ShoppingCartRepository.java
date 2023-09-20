@@ -8,8 +8,9 @@ import java.util.Optional;
 
 public interface ShoppingCartRepository {
     void addItemToCart(ShoppingCartItem shoppingCartItem);
+    Product addProduct(Product product);
 
-    void editItemInCart(long itemId, Product product, int quantity) throws ClassNotFoundException;
+    void editItemInCart(long itemId, ShoppingCartItem shoppingCartItem);
 
     void removeItemFromCart(long itemId);
     Optional<ShoppingCartItem> findItemById(long itemId);
