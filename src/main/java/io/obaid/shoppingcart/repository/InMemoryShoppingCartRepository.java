@@ -21,24 +21,21 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * otherwise the quantity of the item will be incremented
      *
      * @param shoppingCartItem the shopping cart item to add
+     * @return
      */
     @Override
-    public void addItemToCart(ShoppingCartItem shoppingCartItem) {
+    public Optional<ShoppingCartItem> addItemToCart(ShoppingCartItem shoppingCartItem) {
         Optional<ShoppingCartItem> existingShoppingCartItem = findItemById(shoppingCartItem.getId());
-        if (!existingShoppingCartItem.isPresent()) {
+
+        if (existingShoppingCartItem.isPresent()) {
             existingShoppingCartItem.get().setQuantity(existingShoppingCartItem.get().getQuantity() + shoppingCartItem.getQuantity());
         } else {
-            ShoppingCartItem cartItem = new ShoppingCartItem();
-            cartItem.setId(shoppingCartItem.getId());
-            cartItem.setProduct(shoppingCartItem.getProduct());
-            cartItem.setQuantity(shoppingCartItem.getQuantity());
-
             shoppingCarItems.add(shoppingCartItem);
         }
+        return existingShoppingCartItem;
     }
 
     /**
-     *
      * @param product a provided product to be added to the stock
      * @return @link{Product}
      */
@@ -64,7 +61,7 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * @throws @link{ItemNotFoundException} if the item could not be found
      */
     @Override
-    public void editItemInCart(long itemId, ShoppingCartItem shoppingCartItem) {
+    public void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem) {
         Optional<ShoppingCartItem> itemInShoppingCart = findItemById(itemId);
         if (itemInShoppingCart.isEmpty()) {
             throw new ItemNotFoundException("Shopping cart item not found");
@@ -81,7 +78,7 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * @param itemId the ID of the shopping cart item to remove
      */
     @Override
-    public void removeItemFromCart(long itemId) {
+    public void removeItemFromCart(Integer itemId) {
         Optional<ShoppingCartItem> shoppingCartItem = findItemById(itemId);
         if (shoppingCartItem == null) {
             throw new ItemNotFoundException("Shopping cart item not found");
@@ -95,11 +92,10 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * @return @link{ShoppingCartItem} if the item exist, otherwise return null
      */
     @Override
-    public Optional<ShoppingCartItem> findItemById(long itemId) {
-        return Optional.ofNullable(shoppingCarItems.stream()
+    public Optional<ShoppingCartItem> findItemById(Integer itemId) {
+        return shoppingCarItems.stream()
                 .filter(item -> item.getId().equals(itemId))
-                .findFirst()
-                .orElse(null));
+                .findFirst();
     }
 
     /**
