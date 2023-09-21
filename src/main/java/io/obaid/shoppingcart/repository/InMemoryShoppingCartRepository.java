@@ -86,7 +86,6 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
         }
     }
 
-
     /**
      * @param itemId the ID of the shopping cart item to find.
      * @return @link{ShoppingCartItem} if the item exist, otherwise return null

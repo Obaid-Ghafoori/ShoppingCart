@@ -32,3 +32,28 @@ replay_pid*
 .idea_workspace
 .project
 *.ipr
+
+
+
+# Maven
+target/
+
+# Gradle
+build/
+.gradle/
+
+# Spring Boot
+*.iml
+.idea/
+.springBeans
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+
+# VS Code
+.vscode/
