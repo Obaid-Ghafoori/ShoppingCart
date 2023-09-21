@@ -30,7 +30,7 @@ public class ShoppingCartService {
     public void addProduct(Product product) {
         shoppingCartRepository.addProduct(product);
     }
-    public void removeItemFromCart(long itemId) {
+    public void removeItemFromCart(Integer itemId) {
     shoppingCartRepository.removeItemFromCart(itemId);
     }
 
@@ -38,7 +38,7 @@ public class ShoppingCartService {
         return shoppingCartRepository.getShoppingCartItems();
     }
 
-    public void editItemInCart(long itemId, ShoppingCartItem shoppingCartItem) {
+    public void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem) {
         shoppingCartRepository.editItemInCart(itemId,shoppingCartItem);
     }
 }

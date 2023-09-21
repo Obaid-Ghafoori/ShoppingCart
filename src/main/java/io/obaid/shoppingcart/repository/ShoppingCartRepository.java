@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShoppingCartRepository {
-    ShoppingCartItem addItemToCart(ShoppingCartItem shoppingCartItem);
+    Optional<ShoppingCartItem> addItemToCart(ShoppingCartItem shoppingCartItem);
     Product addProduct(Product product);
 
-    void editItemInCart(long itemId, ShoppingCartItem shoppingCartItem);
+    void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem);
 
-    void removeItemFromCart(long itemId);
-    Optional<ShoppingCartItem> findItemById(long itemId);
+    void removeItemFromCart(Integer itemId);
+    Optional<ShoppingCartItem> findItemById(Integer itemId);
 
     List<ShoppingCartItem> getShoppingCartItems();
 }

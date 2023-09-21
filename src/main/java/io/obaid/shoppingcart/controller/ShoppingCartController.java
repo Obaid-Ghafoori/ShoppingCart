@@ -36,7 +36,6 @@ public class ShoppingCartController {
     @PostMapping("/cart/add-item")
     public ShoppingCartItem addItemToCart(@RequestBody ShoppingCartItem shoppingCartItem) {
         ShoppingCartItem updatedItem = shoppingCartService.addItemToCart(shoppingCartItem);
-        System.out.println(updatedItem);
         return updatedItem;
     }
 
@@ -60,7 +59,7 @@ public class ShoppingCartController {
      * @return a redirect to the shopping cart page
      */
     @PutMapping("/cart/{itemId}")
-    public String editItemInCart(@PathVariable long itemId, @RequestBody ShoppingCartItem shoppingCartItem) {
+    public String editItemInCart(@PathVariable Integer itemId, @RequestBody ShoppingCartItem shoppingCartItem) {
         shoppingCartService.editItemInCart(itemId, shoppingCartItem);
         return "redirect:/cart";
     }
@@ -72,7 +71,7 @@ public class ShoppingCartController {
      * @return a redirect to the shopping cart page
      */
     @DeleteMapping("/cart/{itemId}")
-    public String removeItemFromCart(@PathVariable long itemId) {
+    public String removeItemFromCart(@PathVariable Integer itemId) {
         shoppingCartService.removeItemFromCart(itemId);
         return "redirect:/cart";
     }
@@ -82,7 +81,7 @@ public class ShoppingCartController {
      *
      * @return the shopping cart page
      */
-    @GetMapping("/cart")
+    @GetMapping("/get-cart-items")
     public List<ShoppingCartItem> getShoppingCartItems() {
         return shoppingCartService.getShoppingCartItems();
     }
