@@ -80,7 +80,6 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
     @Override
     public void removeItemFromCart(Integer itemId) {
         boolean removed = shoppingCarItems.removeIf(item -> item.getId().equals(itemId));
-
         if (!removed) {
             throw new ItemNotFoundException("Shopping cart item not found");
         }
