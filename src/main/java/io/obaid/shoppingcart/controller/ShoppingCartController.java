@@ -61,7 +61,7 @@ public class ShoppingCartController {
     @PutMapping("/cart/{itemId}")
     public String editItemInCart(@PathVariable Integer itemId, @RequestBody ShoppingCartItem shoppingCartItem) {
         shoppingCartService.editItemInCart(itemId, shoppingCartItem);
-        return "redirect:/cart";
+        return "item " + itemId + " has successfully updated!";
     }
 
     /**
@@ -73,7 +73,7 @@ public class ShoppingCartController {
     @DeleteMapping("/cart/{itemId}")
     public String removeItemFromCart(@PathVariable Integer itemId) {
         shoppingCartService.removeItemFromCart(itemId);
-        return "redirect:/cart";
+        return "item " + itemId + " has successfully DELETED!";
     }
 
     /**

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * An  implementation of the `ShoppingCartRepository` interface that uses a `List` to store the shopping cart items in memory.
+ * An implementation of the `ShoppingCartRepository` interface that uses a `List` to store the shopping cart items in memory.
  */
 @AllArgsConstructor
 public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
@@ -79,13 +79,13 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      */
     @Override
     public void removeItemFromCart(Integer itemId) {
-        Optional<ShoppingCartItem> shoppingCartItem = findItemById(itemId);
-        if (shoppingCartItem == null) {
+        boolean removed = shoppingCarItems.removeIf(item -> item.getId().equals(itemId));
+
+        if (!removed) {
             throw new ItemNotFoundException("Shopping cart item not found");
         }
-
-        shoppingCarItems.remove(shoppingCartItem);
     }
+
 
     /**
      * @param itemId the ID of the shopping cart item to find.
