@@ -20,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ShoppingCartService {
     private List<ShoppingCartItem> shoppingCartItemList;
-    @Autowired
     private InMemoryShoppingCartRepository shoppingCartRepository;
     public ShoppingCartService(List<ShoppingCartItem> shoppingCartItem){
         this.shoppingCartItemList = shoppingCartItem;
