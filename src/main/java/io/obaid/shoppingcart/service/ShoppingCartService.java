@@ -5,6 +5,7 @@ import io.obaid.shoppingcart.model.ShoppingCartItem;
 import io.obaid.shoppingcart.repository.InMemoryShoppingCartRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ShoppingCartService {
     private List<ShoppingCartItem> shoppingCartItemList;
+    @Autowired
     private InMemoryShoppingCartRepository shoppingCartRepository;
     public ShoppingCartService(List<ShoppingCartItem> shoppingCartItem){
         this.shoppingCartItemList = shoppingCartItem;
