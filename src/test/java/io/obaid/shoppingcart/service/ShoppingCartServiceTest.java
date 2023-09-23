@@ -1,74 +1,93 @@
-package io.obaid.shoppingcart.service;//package io.obaid.shoppingcart.service;
+package io.obaid.shoppingcart.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import io.obaid.shoppingcart.model.Product;
+import io.obaid.shoppingcart.model.ShoppingCartItem;
+import io.obaid.shoppingcart.repository.InMemoryShoppingCartRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import io.obaid.shoppingcart.model.Product;
-import io.obaid.shoppingcart.model.ShoppingCartItem;
-import io.obaid.shoppingcart.repository.InMemoryShoppingCartRepository;
-import io.obaid.shoppingcart.repository.ShoppingCartRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class ShoppingCartServiceTest {
 
+    @InjectMocks
+    private ShoppingCartService shoppingCartService;
+
     @Mock
-    private ShoppingCartRepository shoppingCartRepository;
+    private InMemoryShoppingCartRepository shoppingCartRepository;
+
     private List<ShoppingCartItem> shoppingCartItems;
 
     @BeforeEach
     void setUp() {
         shoppingCartItems = new ArrayList<>();
-        shoppingCartRepository = new InMemoryShoppingCartRepository(shoppingCartItems);
+    }
+
+    @Test
+    @DisplayName("Add item to the shopping cart, if it is not already exist")
+    void addItemToCartIfNotExists() {
+        // Arrange
+        ShoppingCartItem newItem = new ShoppingCartItem();
+        newItem.setId(1);
+        newItem.setQuantity(2);
+        shoppingCartItems.add(newItem);
+
+        //mock the behaviour
+        when(shoppingCartRepository.addItemToCart(newItem)).thenReturn(Optional.of(newItem));
+
+        // Act
+        ShoppingCartItem actualResult = shoppingCartService.addItemToCart(newItem);
+
+        // Assert: Verify that the item is added
+        assertThat(shoppingCartItems.size()).isEqualTo(1);
+        assertThat(actualResult).isEqualTo(newItem);
+        assertThat(actualResult.getId()).isEqualTo(1);
+
+        verify(shoppingCartRepository).addItemToCart(newItem);
     }
 
     @Test
     @DisplayName("Add item to the shopping cart, increment the quantity if the item already exists")
-    void addItemToCartIncrementQuantityOfItemIfExists() {
+    void addItemToCartIncrementQuantityOfItemIfExists1() {
         // Arrange: Prepare an existing item
-        Product product = Product.builder().id(1l).name("Apple").description("abc").price(1.2).quantityInStock(22).category("fruits").build();
-        ShoppingCartItem item = new ShoppingCartItem();
-
-        item.setId(1);
-        item.setProduct(product);
-        item.setQuantity(3);
-        item.setTotalCost(2.33);
-        shoppingCartItems.add(item);
-
-        // Act: Add the same item again
+        Product product = Product.builder().id(1L).name("Apple").description("abc").price(1.2).quantityInStock(22).category("fruits").build();
         ShoppingCartItem existingItem = new ShoppingCartItem();
         existingItem.setId(1);
-        existingItem.setQuantity(2);
+        existingItem.setProduct(product);
+        existingItem.setQuantity(3);
+        shoppingCartItems.add(existingItem);
 
-        Optional<ShoppingCartItem> result = shoppingCartRepository.addItemToCart(existingItem);
+        // Mock behavior of shoppingCartRepository
+        when(shoppingCartRepository.findItemById(1)).thenReturn(Optional.of(existingItem));
 
-        // Assert: Verify that the item's quantity is incremented
-        assertThat(result).isPresent();
-        assertThat(result.get().getQuantity()).isEqualTo(5);
-
-        // Assert: Verify that the item is not duplicated in the cart
-        assertThat(shoppingCartItems.size()).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("Add item to the shopping cart, add the item if it doesn't exist")
-    void addItemToCartAddItemIfNotExists() {
-        // Act: Add a new item
+        // Act: Add the same item again
         ShoppingCartItem newItem = new ShoppingCartItem();
         newItem.setId(1);
+        existingItem.setProduct(product);
         newItem.setQuantity(2);
 
-        Optional<ShoppingCartItem> result = shoppingCartRepository.addItemToCart(newItem);
+        ShoppingCartItem actualResult = shoppingCartService.addItemToCart(newItem);
 
-        // Assert: Verify that the item is added
-        assertThat(result).isEmpty(); // An empty Optional should be returned
-        assertThat(shoppingCartItems.size()).isEqualTo(1);
-        assertThat(shoppingCartItems.get(0)).isEqualTo(newItem);
+        // Assert: Verify that the item's quantity is incremented
+        assertThat(actualResult.getQuantity()).isEqualTo(5);
+
+        // Assert: Verify that the item is not duplicated in the cart after calling the service method
+        assertThat(shoppingCartItems).hasSize(1);
+
+        // Verify that shoppingCartRepository methods were called
+        verify(shoppingCartRepository).findItemById(1);
     }
+
 }

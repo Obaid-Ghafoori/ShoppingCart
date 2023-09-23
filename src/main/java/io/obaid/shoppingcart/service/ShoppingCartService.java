@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A service that provides operations for managing shopping carts.
@@ -26,9 +27,18 @@ public class ShoppingCartService {
         this.shoppingCartRepository = new InMemoryShoppingCartRepository(shoppingCartItemList);
     }
     public ShoppingCartItem addItemToCart(ShoppingCartItem shoppingCartItem) {
-        shoppingCartRepository.addItemToCart(shoppingCartItem);
-        return shoppingCartItem;
+        Optional<ShoppingCartItem> existingItem = shoppingCartRepository.findItemById(shoppingCartItem.getId());
+
+        if (existingItem.isPresent()) {
+            ShoppingCartItem currentItem = existingItem.get();
+            currentItem.setQuantity(currentItem.getQuantity() + shoppingCartItem.getQuantity());
+            return currentItem;
+        } else {
+            shoppingCartRepository.addItemToCart(shoppingCartItem);
+            return shoppingCartItem;
+        }
     }
+
 
     public void addProduct(Product product) {
         shoppingCartRepository.addProduct(product);
