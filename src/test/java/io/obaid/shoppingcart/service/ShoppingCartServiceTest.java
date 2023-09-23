@@ -3,6 +3,7 @@ package io.obaid.shoppingcart.service;
 import io.obaid.shoppingcart.model.Product;
 import io.obaid.shoppingcart.model.ShoppingCartItem;
 import io.obaid.shoppingcart.repository.InMemoryShoppingCartRepository;
+import io.obaid.shoppingcart.repository.exception.ItemNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -89,5 +91,39 @@ public class ShoppingCartServiceTest {
         // Verify that shoppingCartRepository methods were called
         verify(shoppingCartRepository).findItemById(1);
     }
+
+    @Test
+    @DisplayName("Remove item from the shopping cart, item exists")
+    void removeItemFromCartItemFoundTest() {
+        // Arrange: Prepare an item
+        shoppingCartService = new ShoppingCartService(shoppingCartItems);
+        ShoppingCartItem item = new ShoppingCartItem();
+        item.setId(1);
+
+        // Act: add item to the cart
+        shoppingCartService.addItemToCart(item);
+
+        // Act: remove item from the cart
+        Integer actualResult = shoppingCartService.removeItemFromCart(1);
+
+        // Assert: Verify that the item is removed and the correct value is returned
+        assertThat(actualResult).isEqualTo(1);
+        assertThat(shoppingCartService.getShoppingCartItems()).hasSize(0);
+    }
+
+    @Test
+    @DisplayName("Throws Item Not Found Exception if the item does not exist in the cart")
+    void removeItemFromCartThrowsItemNotFoundExceptionTest() {
+        shoppingCartService = new ShoppingCartService();
+        // Arrange: Item does not exist
+        Integer itemId = 1;
+
+        // Act and Assert: Verify that an ItemNotFoundException is thrown
+        assertThatThrownBy(() -> shoppingCartService.removeItemFromCart(itemId))
+                .isInstanceOf(ItemNotFoundException.class)
+                .hasMessage(String.format("Shopping cart item with id %d not found", itemId));
+
+    }
+
 
 }

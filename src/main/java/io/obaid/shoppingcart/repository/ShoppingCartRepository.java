@@ -12,7 +12,7 @@ public interface ShoppingCartRepository {
 
     void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem);
 
-    void removeItemFromCart(Integer itemId);
+    Integer removeItemFromCart(Integer itemId);
     Optional<ShoppingCartItem> findItemById(Integer itemId);
 
     List<ShoppingCartItem> getShoppingCartItems();
