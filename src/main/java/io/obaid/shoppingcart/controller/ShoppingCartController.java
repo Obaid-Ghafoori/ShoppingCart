@@ -26,7 +26,6 @@ public class ShoppingCartController {
     private List<ShoppingCartItem> shoppingCartItemList = new ArrayList<>();
     private final ShoppingCartService shoppingCartService = new ShoppingCartService(shoppingCartItemList);
 
-
     /**
      * Adds an item to the shopping cart.
      *

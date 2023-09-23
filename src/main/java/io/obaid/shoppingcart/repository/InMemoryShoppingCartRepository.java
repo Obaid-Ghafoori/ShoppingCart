@@ -4,6 +4,7 @@ import io.obaid.shoppingcart.model.Product;
 import io.obaid.shoppingcart.model.ShoppingCartItem;
 import io.obaid.shoppingcart.repository.exception.ItemNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
  * An implementation of the `ShoppingCartRepository` interface that uses a `List` to store the shopping cart items in memory.
  */
 @AllArgsConstructor
+@NoArgsConstructor
 public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
     private List<ShoppingCartItem> shoppingCarItems = new ArrayList<>();
 
@@ -21,7 +23,7 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * otherwise the quantity of the item will be incremented
      *
      * @param shoppingCartItem the shopping cart item to add
-     * @return
+     * @return shoppingCartItem with the correct quantity
      */
     @Override
     public Optional<ShoppingCartItem> addItemToCart(ShoppingCartItem shoppingCartItem) {
@@ -58,7 +60,7 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      *
      * @param itemId           the ID of the shopping cart item to edit
      * @param shoppingCartItem the item in the shopping cart
-     * @throws @link{ItemNotFoundException} if the item could not be found
+     * @throws ItemNotFoundException if the item could not be found
      */
     @Override
     public void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem) {
@@ -76,13 +78,16 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      * Removes a shopping cart item from the repository.
      *
      * @param itemId the ID of the shopping cart item to remove
+     * @return deleted item id
      */
     @Override
-    public void removeItemFromCart(Integer itemId) {
+    public Integer removeItemFromCart(Integer itemId) {
+      //  shoppingCarItems.add(new ShoppingCartItem());
         boolean removed = shoppingCarItems.removeIf(item -> item.getId().equals(itemId));
         if (!removed) {
-            throw new ItemNotFoundException("Shopping cart item not found");
+            throw new ItemNotFoundException(String.format("Shopping cart item with id %d not found", itemId));
         }
+        return itemId;
     }
 
     /**
