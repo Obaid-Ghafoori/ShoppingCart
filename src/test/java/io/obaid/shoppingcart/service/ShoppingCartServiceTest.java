@@ -39,7 +39,7 @@ public class ShoppingCartServiceTest {
 
     @Test
     @DisplayName("Add item to the shopping cart, if it is not already exist")
-    void addItemToCartIfNotExists() {
+    void addItemToCartIfNotExistsTest() {
         // Arrange
         ShoppingCartItem newItem = new ShoppingCartItem();
         newItem.setId(1);
@@ -62,7 +62,7 @@ public class ShoppingCartServiceTest {
 
     @Test
     @DisplayName("Add item to the shopping cart, increment the quantity if the item already exists")
-    void addItemToCartIncrementQuantityOfItemIfExists() {
+    void addItemToCartIncrementQuantityOfItemIfExistsTest() {
         // Arrange: Prepare an existing item
         Product product = Product.builder().id(1L).name("Apple").description("abc").price(1.2).quantityInStock(22).category("fruits").build();
         ShoppingCartItem existingItem = new ShoppingCartItem();
@@ -124,6 +124,31 @@ public class ShoppingCartServiceTest {
                 .hasMessage(String.format("Shopping cart item with id %d not found", itemId));
 
     }
+
+    @Test
+    @DisplayName("Edit item in cart returns an existing ShoppingCartItem in the cart")
+    void editItemInCartReturnsItemToBeEditedTest() {
+        // Arrange
+        Integer itemId = 1;
+        ShoppingCartItem item = new ShoppingCartItem();
+        item.setId(itemId);
+        item.setQuantity(3);
+
+        // Set up mock behavior for the repository
+        when(shoppingCartRepository.findItemById(itemId)).thenReturn(Optional.of(item));
+
+        // Act: add item to the cart
+        shoppingCartService.addItemToCart(item);
+
+        // Act
+        ShoppingCartItem editedItem = shoppingCartService.editItemInCart(itemId, item);
+
+        // Assert
+        assertThat(editedItem).isNotNull();
+        verify(shoppingCartRepository).editItemInCart(itemId, item);
+    }
+
+
 
     @Test
     @DisplayName("Edit item in cart throws Item Not Found Exception if the item does not exist in the cart")
