@@ -62,7 +62,7 @@ public class ShoppingCartServiceTest {
 
     @Test
     @DisplayName("Add item to the shopping cart, increment the quantity if the item already exists")
-    void addItemToCartIncrementQuantityOfItemIfExists1() {
+    void addItemToCartIncrementQuantityOfItemIfExists() {
         // Arrange: Prepare an existing item
         Product product = Product.builder().id(1L).name("Apple").description("abc").price(1.2).quantityInStock(22).category("fruits").build();
         ShoppingCartItem existingItem = new ShoppingCartItem();
@@ -125,5 +125,19 @@ public class ShoppingCartServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Edit item in cart throws Item Not Found Exception if the item does not exist in the cart")
+    void editItemInCartThrowsItemNotFoundExceptionTest() {
+        // Arrange: Item does not exist
+        Integer itemId = 1;
+
+        // Set up mock behavior for the repository
+        when(shoppingCartRepository.findItemById(itemId)).thenReturn(Optional.empty());
+
+        // Act and Assert: Verify that an ItemNotFoundException is thrown
+        assertThatThrownBy(() -> shoppingCartService.editItemInCart(itemId, new ShoppingCartItem()))
+                .isInstanceOf(ItemNotFoundException.class)
+                .hasMessage(String.format("Shopping cart item with id %d not found", itemId));
+    }
 
 }
