@@ -63,7 +63,14 @@ public class ShoppingCartService {
         return shoppingCartRepository.getShoppingCartItems();
     }
 
-    public void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem) {
+    public ShoppingCartItem editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem) {
+        Optional<ShoppingCartItem> foundItem = shoppingCartRepository.findItemById(itemId);
+
+        if (!foundItem.isPresent()) {
+            throw new ItemNotFoundException(String.format("Shopping cart item with id %d not found", itemId));
+        }
+
         shoppingCartRepository.editItemInCart(itemId, shoppingCartItem);
+        return foundItem.get();
     }
 }

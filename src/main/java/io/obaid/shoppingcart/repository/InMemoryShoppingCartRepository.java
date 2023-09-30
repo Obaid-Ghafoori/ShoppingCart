@@ -66,11 +66,13 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
     public void editItemInCart(Integer itemId, ShoppingCartItem shoppingCartItem) {
         Optional<ShoppingCartItem> itemInShoppingCart = findItemById(itemId);
         if (itemInShoppingCart.isEmpty()) {
-            throw new ItemNotFoundException("Shopping cart item not found");
+            throw new ItemNotFoundException(String.format("Shopping cart item with id %d not found", itemId));
         }
 
+        itemInShoppingCart.get().setId(shoppingCartItem.getId());
         itemInShoppingCart.get().setProduct(shoppingCartItem.getProduct());
         itemInShoppingCart.get().setQuantity(shoppingCartItem.getQuantity());
+        itemInShoppingCart.get().setTotalCost(shoppingCartItem.getTotalCost());
 
     }
 
@@ -82,7 +84,6 @@ public class InMemoryShoppingCartRepository implements ShoppingCartRepository {
      */
     @Override
     public Integer removeItemFromCart(Integer itemId) {
-      //  shoppingCarItems.add(new ShoppingCartItem());
         boolean removed = shoppingCarItems.removeIf(item -> item.getId().equals(itemId));
         if (!removed) {
             throw new ItemNotFoundException(String.format("Shopping cart item with id %d not found", itemId));
